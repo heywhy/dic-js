@@ -1,0 +1,8 @@
+{
+  "name": "container-js",
+  "version": "0.1.0",
+  "main": "./lib/index.js",
+  "author": "Atanda Rasheed Ayomide <atandarash@gmail.com>",
+  "license": "MIT",
+  "private": false
+}
