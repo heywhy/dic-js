@@ -119,7 +119,7 @@ class Container
     ###
     bindToContainerProps: (abstract) ->
         return if not is_nil @[abstract]
-        Object.defineProperty this, abstract,
+        Object.defineProperty @, abstract,
             configurable: true,
             get: () -> @make abstract
 
@@ -139,6 +139,7 @@ class Container
             shared
             factory: wrap_func(factory)
         }
+        @bindToContainerProps abstract
         @rebound abstract if @resolved abstract
 
     ###
