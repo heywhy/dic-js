@@ -1,4 +1,5 @@
-{is_nil, is_object, noop, array_wrap, wrap_func} = require './utils'
+{ResolveError, NotFoundError} = require './errors'
+{is_nil, is_object, is_function, noop, array_wrap, wrap_func} = require './utils'
 
 buildStack = []
 
@@ -204,7 +205,7 @@ class Container
     make: (abstract) -> @resolve abstract
 
     #
-    resolve: (abstract, params = {}) ->
+    resolve: (abstract) ->
         context = @getContextualFactory abstract = @getAlias abstract
         return @_instances[abstract] if @_instances[abstract] and not context
         concrete = @getConcrete abstract
@@ -223,11 +224,19 @@ class Container
     build: (abstract, concrete) ->
         if is_object concrete then {deps, factory} = concrete else factory = concrete
         deps = array_wrap deps
-        return factory @ if deps and deps.length < 1
-        buildStack.push abstract
-        args = @resolveDeps deps
-        buildStack.pop()
-        factory args...
+        if not is_function factory
+            throw new NotFoundError "service '#{abstract}' not found in the container!"
+        try
+            return factory @ if deps and deps.length < 1
+            buildStack.push abstract
+            args = @resolveDeps deps
+            buildStack.pop()
+            factory args...
+        catch error
+            err = new ResolveError "unable to build service '#{abstract}'", deps
+            err.setBaseError error
+            throw err
+
     #
     resolveDeps: (deps = []) -> @make dep for dep in array_wrap deps
 
