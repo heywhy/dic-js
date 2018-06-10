@@ -79,9 +79,7 @@ class Container
     # @return {boolean}
     ###
     isShared: (abstract) ->
-        on if @_instances[abstract] || (
-            @_bindings[abstract] && @_bindings[abstract].shared
-        )
+        @_instances[abstract] or (@_bindings[abstract] and @_bindings[abstract].shared)
 
     ###
     # checks if the given abstract has been bound
@@ -90,7 +88,7 @@ class Container
     # @return {boolean}
     ###
     bound: (abstract) ->
-        on if @_bindings[abstract] || @_instances[abstract] || @isAlias abstract
+        @_bindings[abstract] or @_instances[abstract] or @isAlias abstract
 
     ###
     # determines if the given abstract has been resolved
@@ -101,7 +99,7 @@ class Container
     ###
     resolved: (abstract) ->
         abstract = @getAlias abstract if @isAlias abstract
-        @_resolved[abstract] || @_instances[abstract]
+        @_resolved[abstract] or @_instances[abstract]
 
     ###
     # removes the abstract from the container
@@ -111,6 +109,7 @@ class Container
     dropStaleInstances: (abstract) ->
         delete @_instances[abstract]
         delete @_aliases[abstract]
+        on
 
     ###
     # makes the abstract accessible like its a prop
@@ -199,7 +198,7 @@ class Container
     findInContextualBindings: (abstract) ->
         last = buildStack[buildStack.length - 1]
         context = @_contextual[last]
-        context[abstract] if context && context[abstract]
+        context[abstract] if context and context[abstract]
 
     #
     make: (abstract) -> @resolve abstract
@@ -211,13 +210,13 @@ class Container
         concrete = @getConcrete abstract
         val = @build abstract, concrete
         val = callback val, @ for callback in @getExtenders abstract
-        @_instances[abstract] = val if @isShared abstract
+        @_instances[abstract] = val if not context and @isShared abstract
         @_resolved[abstract] = on
         val
 
     #
     addContextualBinding: (concrete, abstract, giver = noop) ->
-        @_contextual[concrete] = @_contextual[concrete] || {}
+        @_contextual[concrete] = @_contextual[concrete] or {}
         @_contextual[concrete][@getAlias abstract] = wrap_func giver
 
     #
