@@ -4,5 +4,13 @@
   "main": "./lib/index.js",
   "author": "Atanda Rasheed Ayomide <atandarash@gmail.com>",
   "license": "MIT",
-  "private": false
+  "private": false,
+  "scripts": {
+    "build": "bash ./scripts/build",
+    "cleans": "bash ./scripts/clean",
+    "serve:docs": "vuepress dev doc_pages",
+    "build:docs": "vuepress build doc_pages -d docs",
+    "compile": "coffee -c --no-header -b -o lib src",
+    "watch": "coffee -c --no-header -b -w -o lib src"
+  }
 }
