@@ -23,4 +23,4 @@ bind('phone', ['screen'], print)
 bind('phone').deps(screen).factory(print)
 ```
 
-Read the [docs](https://github.com/heywhy/container-js)
+Read the [docs](https://heywhy.github.io/container-js/)

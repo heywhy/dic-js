@@ -1,5 +1,6 @@
 module.exports = {
   title: 'ContainerJs',
+  base: '/container-js/',
   themeConfig: {
     search: true,
     docsDir: 'docs',
