@@ -1,13 +1,13 @@
 module.exports = {
-  title: 'ContainerJs',
-  base: '/container-js/',
+  title: 'DicJS',
+  base: '/dic-js/',
   themeConfig: {
     search: true,
     docsDir: 'docs',
     lastUpdated: true,
     logo: 'img/logo.png',
     searchMaxSuggestions: 10,
-    repo: 'heywhy/container-js',
+    repo: 'heywhy/dic-js',
     nav: [
       // { text: 'Blogs', link: '/blogs/' },
       // {

@@ -2,7 +2,6 @@
 title: 'Introduction'
 sidebar: 'auto'
 prev: '/'
-# next: '/blogs/'
 editLink: true
 ---
 
@@ -12,12 +11,12 @@ Have you ever thought of how beautiful **Laravel** container is. Here is an impl
 
 ## Introduction To Newcomers
 
-Container-js is a powerful tool for managing service dependencies and performing dependency injection. Dependency injection is a fancy phrase that essentially means this: service dependencies are "injected" into the factory as arguments/parameters.
+Dic-JS is a powerful tool for managing service dependencies and performing dependency injection. Dependency injection is a fancy phrase that essentially means this: service dependencies are "injected" into the factory as arguments/parameters.
 
 Let's look at a simple example:
 
 ```js
-const {bind} = require('container-js')
+const {bind} = require('dic-js')
 // using the comment style for this style should be used
 // with helper `wrap` or binded directly into the
 // container without specifying dependencies
@@ -52,7 +51,7 @@ Note that we receive the container itself as an argument to the resolver only if
 The `singleton` method binds a service into the container that should only be resolved one time. Once a singleton binding is resolved, the same value/object instance will be returned on subsequent calls into the container:
 
 ```js
-const {make, singleton} = require('container-js')
+const {make, singleton} = require('dic-js')
 // its shares same api as the bind method
 singleton('screen', () => new Screen(...))
 make('screen') === make('screen') // => true
@@ -64,7 +63,7 @@ You may also bind an existing value/object instance into the container using the
 
 ```js
 const button = new BackButton()
-const {instance} = require('container-js')
+const {instance} = require('dic-js')
 instance('back-btn', button)
 ```
 
@@ -73,7 +72,7 @@ instance('back-btn', button)
 Sometimes you may have a service that receives some injected services, but also needs an injected primitive value such as an integer. You may easily use contextual binding to inject any value your class may need:
 
 ```js
-const {when} = require('container-js')
+const {when} = require('dic-js')
 
 if (application in development) {
   when('phone').needs('number').give('123456789')
@@ -104,7 +103,7 @@ if (application in development) {
 The `extend` method allows the modification of resolved services. For example, when a service is resolved, you may run additional code to decorate or configure the service. The `extend` method accepts a Closure, which should return the modified service, as its only argument:
 
 ```js
-const {extend} = require('container-js')
+const {extend} = require('dic-js')
 extend('screen', s => s.setSize(...) && s)
 ```
 
@@ -115,7 +114,7 @@ The `make` method.
 You may use the `make` method to resolve a service instance out of the container. The make method accepts the name of the service you wish to resolve:
 
 ```js
-const {make} = require('container-js')
+const {make} = require('dic-js')
 const phone = make('phone')
 phone.call()
 ```
@@ -128,7 +127,7 @@ Alternatively, and importantly, you may "type-hint" the dependency in the body o
 For example, you may type-hint a service defined by your application in another service resolver or any function. The dependencies will automatically be resolved and injected into the service/callback:
 
 ```js
-const {wrap} = require('container-js')
+const {wrap} = require('dic-js')
 const messenger = wrap(['phone'], (p, msg) => p.message(msg))
 
 messenger('hello world') // => hello world
@@ -140,6 +139,6 @@ const messenger = wrap((p, msg) => {
 // or
 singleton('database', (config) => {
   /*@container(config)*/
-  return new Connector(config.get('database.*))
+  return new Connector(config.get('database.*'))
 })
 ```
