@@ -2,9 +2,22 @@
   "name": "dic-js",
   "version": "0.1.0",
   "main": "./lib/index.js",
+  "description": "Have you ever thought of how beautiful **Laravel** container is. Here is an implementation in javascript.",
   "author": "Atanda Rasheed Ayomide <atandarash@gmail.com>",
   "license": "MIT",
   "private": false,
+  "files": [
+    "lib",
+    "src"
+  ],
+  "homepage": "https://heywhy.github.io/dic-js/",
+  "bugs": {
+    "url": "https://github.com/heywhy/dic-js/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heywhy/dic-js.git"
+  },
   "scripts": {
     "build": "bash ./scripts/build",
     "cleans": "bash ./scripts/clean",
