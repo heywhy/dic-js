@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 
 source $(pwd)/scripts/clean
 yarn run compile && yarn run build:docs

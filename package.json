@@ -1,6 +1,6 @@
 {
   "name": "dic-js",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "./lib/index.js",
   "author": "Atanda Rasheed Ayomide <atandarash@gmail.com>",
   "license": "MIT",
@@ -12,5 +12,11 @@
     "build:docs": "vuepress build doc_pages -d docs",
     "compile": "coffee -c --no-header -b -o lib src",
     "watch": "coffee -c --no-header -b -w -o lib src"
+  },
+  "peerDependencies": {
+    "vue-template-compiler": "^2.5.17"
+  },
+  "devDependencies": {
+    "vuepress": "^0.14.2"
   }
 }

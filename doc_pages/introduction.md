@@ -107,6 +107,36 @@ const {extend} = require('dic-js')
 extend('screen', s => s.setSize(...) && s)
 ```
 
+### Anonymous Service Binding
+
+Instead of hard-coding the services id or name you can let the library do that for you
+by binding a factory only, example;
+
+```js
+const factory = () => ({...})
+
+bind(factory)
+singleton(factory)
+instance(factory, ({...}))
+
+const callMe = () => ...
+
+// The service depends on an anonymous service.
+bind([factory, 'screen'], callMe)
+```
+
+To resolve or make an anonymous service, you pass the factory itself:
+
+```js
+const obj = make(factory)
+const obj1 = make(callMe)
+```
+
+:::warning
+Typehints found on factories will always come before the defined dependencies
+in the array as arguments to the factory.
+:::
+
 ## Resolving
 
 The `make` method.

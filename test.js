@@ -48,26 +48,48 @@
 // tear()
 // const call = wrap(['phone'], p => p.call())
 // call()
-const { bind, make, wrap, extend, singleton } = require('./lib/index')
+const { bind, make, when, wrap, extend, singleton, instance } = require('./lib/index')
 bind('phone', () => ({ no: 080 }))
 
-singleton('screen', () => ({
-  print: msg => console.log(msg)
-}))
+// singleton('screen', () => ({
+//   print: msg => console.log(msg)
+// }))
 
-const callback = wrap((phone, screen, a) => {
-  /*@container(phone, screen)*/
-  return [phone, screen, a]
-})
+// const callback = wrap((phone, screen, a) => {
+//   /*@container(phone, screen)*/
+//   return [phone, screen, a]
+// })
 
-console.log(callback('hello'))
+// console.log(callback('hello'))
 
-singleton('caller', phone => {
+singleton('caller', (phone) => {
   /*@container(phone)*/
   phone.call = () => 'hello world'
   return phone
 })
 
-console.log(make('caller').call())
+// console.log(make('caller').call())
 
-console.log(extend)
+// console.log(extend)
+
+const jik = (c) => {
+  /*@container(caller)*/
+  return {c, name: 'killer'}
+}
+const c = () => 'hello'
+bind(c)
+
+bind([c], jik)
+// instance(jik, "Helli")
+
+// when(jik).needs(c)
+//   .give(() => 'love')
+extend(jik, a => ({...a, lop: "lop"}))
+// bind(['caller'], jik)
+
+try {
+  console.log(make(jik))
+  console.log(wrap([c, 'caller'], (...a) => a)())
+} catch (e) {
+  console.error(e.baseError)
+}
