@@ -5,6 +5,10 @@
   "author": "Atanda Rasheed Ayomide <atandarash@gmail.com>",
   "license": "MIT",
   "private": false,
+  "files": [
+    "src/",
+    "lib/"
+  ],
   "scripts": {
     "build": "bash ./scripts/build",
     "cleans": "bash ./scripts/clean",
