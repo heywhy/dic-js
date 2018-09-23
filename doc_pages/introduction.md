@@ -16,7 +16,7 @@ Dic-JS is a powerful tool for managing service dependencies and performing depen
 Let's look at a simple example:
 
 ```js
-const {bind} = require('dic-js')
+const {bind, make} = require('dic-js')
 // using the comment style for this style should be used
 // with helper `wrap` or binded directly into the
 // container without specifying dependencies
@@ -27,7 +27,10 @@ const print = screen => {
 
 // or
 bind('phone', ['screen'], print)
-bind('phone').deps(screen).factory(print)
+bind('phone').deps('screen').factory(print)
+
+const call = make('phone')
+call('lover') // => 'lover'
 ```
 
 ## Binding
@@ -172,3 +175,33 @@ singleton('database', (config) => {
   return new Connector(config.get('database.*'))
 })
 ```
+
+:::warning
+Auto-Injection is only possible with named abstract/service, not anonymous service.
+:::
+
+## Container Context
+
+You can have a separate container context for your library use so as to avoid global conflict with other libraries that may be making use of the library. The returned context has the same api as the global context, the only difference is that state isn't shared among all contexts in the application.
+
+```js
+const dicJS = require('dic-js)
+const libraryContext = dicJS.getContext('lib:app')
+
+libraryContext.bind(...)
+libraryContext.singleton(...)
+libraryContext.make(...)
+libraryContext.instance(...)
+libraryContext.extend(...)
+libraryContext.wrap(...)
+
+libraryContext.bind('a', 'as')
+libraryContext.bind('as', 2018)
+// resolves the services from the container
+console.log(libraryContext.resolve(['a', 'as'])) // => ['as', 2018]
+```
+
+:::tip
+You're advised to prefix the id of each created context so as not to lead to a conflict.
+e.g `dicJS.getContext('library-name')`
+:::

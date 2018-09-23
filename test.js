@@ -48,7 +48,9 @@
 // tear()
 // const call = wrap(['phone'], p => p.call())
 // call()
-const { bind, make, when, wrap, extend, singleton, instance } = require('./lib/index')
+const { bind, make, when, wrap, extend, singleton, instance } =
+  require('./lib/index')
+  // .context('id')
 bind('phone', () => ({ no: 080 }))
 
 // singleton('screen', () => ({
@@ -93,3 +95,10 @@ try {
 } catch (e) {
   console.error(e.baseError)
 }
+
+const context = require('./lib').getContext('app:id')
+
+context.bind('a', 'as')
+context.bind('as', 'as')
+
+console.log(context.resolve(['a', 'as']))
