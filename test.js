@@ -48,10 +48,10 @@
 // tear()
 // const call = wrap(['phone'], p => p.call())
 // call()
-const { bind, make, when, wrap, extend, singleton, instance } =
-  require('./lib/index')
-  // .context('id')
-bind('phone', () => ({ no: 080 }))
+const { getContext } = require('./out/index')
+const context = getContext()
+
+context.bind('phone', () => ({ no: 080 }))
 
 // singleton('screen', () => ({
 //   print: msg => console.log(msg)
@@ -64,7 +64,7 @@ bind('phone', () => ({ no: 080 }))
 
 // console.log(callback('hello'))
 
-singleton('caller', (phone) => {
+context.singleton('caller', (phone) => {
   /*@container(phone)*/
   phone.call = () => 'hello world'
   return phone
@@ -79,14 +79,14 @@ const jik = (c) => {
   return {c, name: 'killer'}
 }
 const c = () => 'hello'
-bind(c)
+context.bind(c)
 
-bind([c], jik)
+context.bind([c], jik)
 // instance(jik, "Helli")
 
 // when(jik).needs(c)
 //   .give(() => 'love')
-extend(jik, a => ({...a, lop: "lop"}))
+context.extend(jik, a => ({...a, lop: "lop"}))
 // bind(['caller'], jik)
 
 try {
@@ -95,8 +95,6 @@ try {
 } catch (e) {
   console.error(e.baseError)
 }
-
-const context = require('./lib').getContext('app:id')
 
 context.bind('a', 'as')
 context.bind('as', 'as')

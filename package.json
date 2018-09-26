@@ -1,21 +1,21 @@
 {
   "name": "dic-js",
   "version": "0.7.0",
-  "main": "./lib/index.js",
+  "main": "./out/index.js",
   "author": "Atanda Rasheed Ayomide <atandarash@gmail.com>",
   "license": "MIT",
   "private": false,
   "files": [
     "src/",
-    "lib/"
+    "out/"
   ],
   "scripts": {
     "build": "bash ./scripts/build",
-    "cleans": "bash ./scripts/clean",
+    "clean": "bash ./scripts/clean",
     "serve:docs": "vuepress dev doc_pages",
     "build:docs": "vuepress build doc_pages -d docs",
-    "compile": "coffee -c --no-header -b -o lib src",
-    "watch": "coffee -c --no-header -b -w -o lib src"
+    "compile": "tsc -p .",
+    "watch": "tsc -w -p ."
   },
   "devDependencies": {
     "vuepress": "^0.14.2"
