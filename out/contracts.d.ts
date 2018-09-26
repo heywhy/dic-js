@@ -3,7 +3,7 @@ export interface Dictionary<T> {
 }
 export interface ServiceInterface {
     shared: boolean;
-    dependencies: string[];
+    dependencies: Array<string | ServiceFactory>;
     factory(container?: ContainerInterface): any;
 }
 export interface ContextualInterface extends Dictionary<ServiceFactory> {
@@ -30,6 +30,8 @@ export interface RegistrarInterface {
     dependsOn(dependencies: Array<string | ServiceFactory>): RegistrarInterface;
 }
 export interface ContainerInterface {
+    tag(dependencies: Array<string | ServiceFactory>, tags: string | string[]): void;
+    tagged(tag: string): any[];
     getServiceId(id: any): string;
     when(service: string | ServiceFactory): ContextBuilderInterface;
     make(service: string | ServiceFactory, parameters?: any[]): any;
@@ -40,7 +42,6 @@ export interface ContainerInterface {
     has(service: string | ServiceFactory): boolean;
     bound(service: string | ServiceFactory): boolean;
     resolved(service: string | ServiceFactory): boolean;
-    removeAlias(alias: string): void;
     getBindings(): Dictionary<ServiceInterface>;
     instance<T>(service: string | ServiceFactory, value: T): T;
     flush(): void;

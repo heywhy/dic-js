@@ -73,6 +73,23 @@ export default class Container implements ContainerInterface {
      */
     protected globalAfterResolvingCallbacks: ResultCallback[];
     /**
+     * The map holding tagged dependencies.
+     */
+    protected tags: Dictionary<Array<string | ServiceFactory>>;
+    /**
+     * Assign a set of tags to a given binding.
+     *
+     * @param dependencies
+     * @param tags
+     */
+    tag(dependencies: Array<string | ServiceFactory>, tags: string | string[]): void;
+    /**
+     * Resolve all of the bindings for a given tag.
+     *
+     * @param tag
+     */
+    tagged(tag: string): any[];
+    /**
      * Assign an alias to a service defined in the container
      * to allow resolving the abstract using the alias.
      *
@@ -120,7 +137,7 @@ export default class Container implements ContainerInterface {
      *
      * @param alias
      */
-    removeAlias(alias: string): void;
+    protected removeAlias(alias: string): void;
     /**
      * Remove all resolved instances if this service is a singleton.
      *
@@ -273,7 +290,7 @@ export default class Container implements ContainerInterface {
      *
      * @param dependencies
      */
-    protected resolveDependencies(dependencies: string[]): any[];
+    protected resolveDependencies(dependencies: Array<string | ServiceFactory>): any[];
     /**
      * Fire resolving callbacks.
      *
@@ -329,13 +346,6 @@ export default class Container implements ContainerInterface {
      * @param id
      */
     getServiceId(id: any): string;
-    /**
-     * Attach the service name as property so that it can be resolved
-     * accessing it as a property on the container, e.g. container[service].
-     *
-     * @param service
-     */
-    protected bindServiceAsProps(service: string): void;
     /**
      * Return callbacks.
      *

@@ -1,5 +1,5 @@
 import { Dictionary, ContainerInterface, ServiceInterface, ServiceFactory, ReboundCallback, ResultCallback, ContextBuilderInterface, ContextualInterface } from "./contracts";
-import { noop, isFunction, attachKey, isEmpty } from "./utils";
+import { noop, isFunction, attachKey, isEmpty, arrayWrap } from "./utils";
 import ContextBuilder from "./ContextBuilder";
 
 export default class Container implements ContainerInterface {
@@ -101,6 +101,44 @@ export default class Container implements ContainerInterface {
   protected globalAfterResolvingCallbacks: ResultCallback[] = []
 
   /**
+   * The map holding tagged dependencies.
+   */
+  protected tags: Dictionary<Array<string|ServiceFactory>> = {}
+
+  /**
+   * Assign a set of tags to a given binding.
+   *
+   * @param dependencies
+   * @param tags
+   */
+  public tag(dependencies: Array<string|ServiceFactory>, tags: string|string[]) {
+    [tags, dependencies] = [arrayWrap(tags), arrayWrap(dependencies)]
+    for (const tag of tags) {
+      if (!this.tags[tag]) {
+        this.tags[tag] = []
+      }
+      for (const dependency of dependencies) {
+        this.tags[tag].push(dependency)
+      }
+    }
+  }
+
+  /**
+   * Resolve all of the bindings for a given tag.
+   *
+   * @param tag
+   */
+  public tagged(tag: string) {
+    const result = []
+    if (this.tags[tag]) {
+      for (const dependency of this.tags[tag]) {
+        result.push(this.make(dependency))
+      }
+    }
+    return result
+  }
+
+  /**
    * Assign an alias to a service defined in the container
    * to allow resolving the abstract using the alias.
    *
@@ -114,7 +152,6 @@ export default class Container implements ContainerInterface {
       this.serviceAliases[abstract] = []
     }
     this.serviceAliases[abstract].push(alias)
-    this.bindServiceAsProps(alias)
   }
 
   /**
@@ -190,7 +227,7 @@ export default class Container implements ContainerInterface {
    *
    * @param alias
    */
-  public removeAlias(alias: string) {
+  protected removeAlias(alias: string) {
     if (this.aliases[alias] == null) {
       return
     }
@@ -268,7 +305,6 @@ export default class Container implements ContainerInterface {
     delete this.aliases[service]
     const isBound = this.bound(service)
     this.instances[service] = value
-    this.bindServiceAsProps(service)
     if (isBound) {
       this.rebound(service)
     }
@@ -560,10 +596,10 @@ export default class Container implements ContainerInterface {
    *
    * @param dependencies
    */
-  protected resolveDependencies(dependencies: string[]): any[] {
+  protected resolveDependencies(dependencies: Array<string|ServiceFactory>): any[] {
     const results: any[] = []
     for (const dependency of dependencies) {
-      results.push(this.resolve(dependency))
+      results.push(this.resolve(this.getServiceId(dependency)))
     }
     return results
   }
@@ -671,9 +707,8 @@ export default class Container implements ContainerInterface {
     this.services[abstract] = {
       shared,
       factory,
-      dependencies: dependencies.map(v => this.getServiceId(v))
+      dependencies
     }
-    this.bindServiceAsProps(abstract)
     if (this.resolved(abstract)) {
       this.rebound(abstract)
     }
@@ -689,19 +724,6 @@ export default class Container implements ContainerInterface {
     const abstract: string = isFunction(id)
       ? attachKey(<ServiceFactory>id) : <string>id
     return String(abstract)
-  }
-
-  /**
-   * Attach the service name as property so that it can be resolved
-   * accessing it as a property on the container, e.g. container[service].
-   *
-   * @param service
-   */
-  protected bindServiceAsProps(service: string) {
-    Object.defineProperty(this, service, {
-      configurable: true,
-      get: () => this.make(service)
-    })
   }
 
   /**

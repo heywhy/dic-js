@@ -71,6 +71,10 @@ var Container = /** @class */ (function () {
          * service from the container
          */
         this.globalAfterResolvingCallbacks = [];
+        /**
+         * The map holding tagged dependencies.
+         */
+        this.tags = {};
     }
     /**
      * Return the global instance, if not exists create and return.
@@ -92,6 +96,41 @@ var Container = /** @class */ (function () {
         this.instance = instance;
     };
     /**
+     * Assign a set of tags to a given binding.
+     *
+     * @param dependencies
+     * @param tags
+     */
+    Container.prototype.tag = function (dependencies, tags) {
+        var _a;
+        _a = [utils_1.arrayWrap(tags), utils_1.arrayWrap(dependencies)], tags = _a[0], dependencies = _a[1];
+        for (var _i = 0, tags_1 = tags; _i < tags_1.length; _i++) {
+            var tag = tags_1[_i];
+            if (!this.tags[tag]) {
+                this.tags[tag] = [];
+            }
+            for (var _b = 0, dependencies_1 = dependencies; _b < dependencies_1.length; _b++) {
+                var dependency = dependencies_1[_b];
+                this.tags[tag].push(dependency);
+            }
+        }
+    };
+    /**
+     * Resolve all of the bindings for a given tag.
+     *
+     * @param tag
+     */
+    Container.prototype.tagged = function (tag) {
+        var result = [];
+        if (this.tags[tag]) {
+            for (var _i = 0, _a = this.tags[tag]; _i < _a.length; _i++) {
+                var dependency = _a[_i];
+                result.push(this.make(dependency));
+            }
+        }
+        return result;
+    };
+    /**
      * Assign an alias to a service defined in the container
      * to allow resolving the abstract using the alias.
      *
@@ -105,7 +144,6 @@ var Container = /** @class */ (function () {
             this.serviceAliases[abstract] = [];
         }
         this.serviceAliases[abstract].push(alias);
-        this.bindServiceAsProps(alias);
     };
     /**
      * Get the service the alias is attached to.
@@ -245,7 +283,6 @@ var Container = /** @class */ (function () {
         delete this.aliases[service];
         var isBound = this.bound(service);
         this.instances[service] = value;
-        this.bindServiceAsProps(service);
         if (isBound) {
             this.rebound(service);
         }
@@ -508,9 +545,9 @@ var Container = /** @class */ (function () {
      */
     Container.prototype.resolveDependencies = function (dependencies) {
         var results = [];
-        for (var _i = 0, dependencies_1 = dependencies; _i < dependencies_1.length; _i++) {
-            var dependency = dependencies_1[_i];
-            results.push(this.resolve(dependency));
+        for (var _i = 0, dependencies_2 = dependencies; _i < dependencies_2.length; _i++) {
+            var dependency = dependencies_2[_i];
+            results.push(this.resolve(this.getServiceId(dependency)));
         }
         return results;
     };
@@ -592,7 +629,6 @@ var Container = /** @class */ (function () {
      * @param shared
      */
     Container.prototype.binder = function (service, dependencies, factory, shared) {
-        var _this = this;
         if (factory === void 0) { factory = utils_1.noop; }
         if (shared === void 0) { shared = true; }
         var abstract = this.getServiceId(service);
@@ -604,9 +640,8 @@ var Container = /** @class */ (function () {
         this.services[abstract] = {
             shared: shared,
             factory: factory,
-            dependencies: dependencies.map(function (v) { return _this.getServiceId(v); })
+            dependencies: dependencies
         };
-        this.bindServiceAsProps(abstract);
         if (this.resolved(abstract)) {
             this.rebound(abstract);
         }
@@ -621,19 +656,6 @@ var Container = /** @class */ (function () {
         var abstract = utils_1.isFunction(id)
             ? utils_1.attachKey(id) : id;
         return String(abstract);
-    };
-    /**
-     * Attach the service name as property so that it can be resolved
-     * accessing it as a property on the container, e.g. container[service].
-     *
-     * @param service
-     */
-    Container.prototype.bindServiceAsProps = function (service) {
-        var _this = this;
-        Object.defineProperty(this, service, {
-            configurable: true,
-            get: function () { return _this.make(service); }
-        });
     };
     /**
      * Return callbacks.
