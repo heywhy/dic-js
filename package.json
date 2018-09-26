@@ -1,6 +1,6 @@
 {
   "name": "dic-js",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "main": "./out/index.js",
   "author": "Atanda Rasheed Ayomide <atandarash@gmail.com>",
   "license": "MIT",
