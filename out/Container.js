@@ -495,6 +495,9 @@ var Container = /** @class */ (function () {
         var dependencies = binding.dependencies;
         this.serviceBuildStack.push(service);
         var deps = this.resolveDependencies(dependencies);
+        if (deps.length < 1) {
+            deps.push(this);
+        }
         this.serviceBuildStack.pop();
         return concrete.apply(void 0, deps);
     };

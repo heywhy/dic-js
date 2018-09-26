@@ -547,7 +547,9 @@ export default class Container implements ContainerInterface {
     const {dependencies} = binding
     this.serviceBuildStack.push(service)
     const deps = this.resolveDependencies(dependencies)
-
+    if (deps.length < 1) {
+      deps.push(this)
+    }
     this.serviceBuildStack.pop()
 
     return concrete(...deps)
