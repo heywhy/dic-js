@@ -279,9 +279,12 @@ container.bind('SpeedReport', function () {
 
 container.bind('MemoryReport', function () {
     //
-});
+})
 
-container.tag(['SpeedReport', 'MemoryReport'], 'reports');
+container.tag(['SpeedReport', 'MemoryReport'], 'reports')
+
+// resolve tagged dependencies
+container.tagged('reports') // [...dependencies]
 ```
 :::tip
 Tagging replaces `resolve` method in <v0.8.
