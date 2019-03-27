@@ -290,6 +290,72 @@ container.tagged('reports') // [...dependencies]
 Tagging replaces `resolve` method in <v0.8.
 :::
 
+## Decorators
+
+You can now make use of decorators to define services and they can all be resolved using the
+`const {make} = require('dic-js')` function.
+
+### @Bind(contexts?: `string|string[]`)
+
+- **Usage:**
+
+  ``` js
+  @Bind
+  class App {}
+
+  @Bind('app')
+  class Apps {}
+  ```
+  Binds the class to the default container or the given context|s. You can also provide
+  a context if you don't want to bind to the default container.
+
+
+### @Singleton(contexts?: `string|string[]`)
+
+- **Usage:**
+
+  ``` js
+  @Singleton
+  class App {}
+  ```
+  Binds the class as a singleton to the default container or the given context|s. You can also provide
+  a context if you don't want to bind to the default container
+
+
+### @Make(`service: factory|class, contexts?: string|string[]`)
+
+- **Usage:**
+
+  ``` js
+  @Singleton
+  class Config {}
+
+  @Bind
+  class App {
+    constructor(@Make(Config) private config: Config) {}
+  }
+  ```
+  This helps define the constructor parameter type.
+
+:::tip
+Guess what :wink:, you can resolve the classes/services using the same old method `const app = make(App)`.
+:::
+
+:::warning
+If a context is provided then the service can only be reolved from the given|contexts,
+so you might need to specify which context to resolve the service from.
+
+```js
+@Bind('app')
+class App {}
+
+@Singleton
+class Logger {
+  constructor(@Make(App, 'app') private app: App) {}
+}
+```
+:::
+
 ## Api Documentation
 
 The api for the library can be found in the declaration files(*.d.ts) in the source of the library.

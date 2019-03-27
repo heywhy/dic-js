@@ -1,6 +1,6 @@
-import Registrar from 'dic-js/out/Registrar'
-import { bind, singleton, getContext, make } from 'dic-js'
-import { ContainerInterface } from 'dic-js/out/contracts'
+import Registrar from './Registrar'
+import { ContainerInterface } from './contracts'
+import { bind, singleton, getContext, make } from '.'
 
 const depKey = '$$---DEP---$$'
 
