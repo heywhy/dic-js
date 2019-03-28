@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var _1 = require(".");
+var utils_1 = require("./utils");
 var depKey = '$$---DEP---$$';
 var deleteDeps = function (d) { return delete d[depKey]; };
 var getDeps = function (d) { return d[depKey] || (d[depKey] = []); };
@@ -31,23 +32,26 @@ var factory = function (containers, instance) {
                 : _1.bind(target, container);
             registrar.factory(function () {
                 var args = [];
-                for (var index = 0; index < deps.length; index++) {
-                    var dep = deps[index];
-                    try {
-                        if (Array.isArray(dep)) {
-                            var dep1 = dep[0], context = dep[1];
-                            args.push(_1.make(dep1, _1.getContext(context)));
-                        }
-                        else {
-                            args.push(_1.make(dep, _1.getContext()));
-                        }
-                        break;
+                deps.forEach(function (dep) {
+                    var dep1 = dep[0], contexts = dep[1];
+                    contexts = utils_1.arrayWrap(contexts);
+                    if (contexts.length < 1) {
+                        args.push(_1.make(dep1, _1.getContext()));
                     }
-                    catch (e) {
-                        if (index + 1 == deps.length)
-                            throw e;
+                    else {
+                        contexts.some(function (context, i) {
+                            try {
+                                args.push(_1.make(dep1, _1.getContext(context)));
+                                return true;
+                            }
+                            catch (e) {
+                                if (i + 1 == contexts.length)
+                                    throw e;
+                            }
+                            return false;
+                        });
                     }
-                }
+                });
                 var klass = target;
                 return new (klass.bind.apply(klass, [void 0].concat(args)))();
             });

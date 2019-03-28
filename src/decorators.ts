@@ -1,11 +1,12 @@
 import Registrar from './Registrar'
 import { ContainerInterface } from './contracts'
 import { bind, singleton, getContext, make } from '.'
+import { arrayWrap } from './utils';
 
 const depKey = '$$---DEP---$$'
 
 const deleteDeps = (d: any) => delete d[depKey]
-const getDeps = (d: any): Array<string|string[]> => d[depKey] || (d[depKey] = [])
+const getDeps = (d: any): Array<[string, string[]]> => d[depKey] || (d[depKey] = [])
 
 const decorator = (target: any, single = true): any => {
   let container = getContext()
@@ -43,20 +44,23 @@ const factory = (containers: ContainerInterface[], instance: boolean) => {
       registrar.factory(() => {
         const args: any[] = []
 
-        for (let index = 0; index < deps.length; index++) {
-          const dep = deps[index]
-          try {
-            if (Array.isArray(dep)) {
-              const [dep1, context] = dep
-              args.push(make(dep1, getContext(context)))
-            } else {
-              args.push(make(dep, getContext()))
-            }
-            break
-          } catch (e) {
-            if (index + 1 == deps.length) throw e
+        deps.forEach(dep => {
+          let [dep1, contexts] = dep
+          contexts = arrayWrap(contexts)
+          if (contexts.length < 1) {
+            args.push(make(dep1, getContext()))
+          } else {
+            contexts.some((context, i) => {
+              try {
+                args.push(make(dep1, getContext(context)))
+                return true
+              } catch (e) {
+                if (i + 1 == contexts.length) throw e
+              }
+              return false
+            })
           }
-        }
+        })
 
         const klass = target as InstanceType<any>
         return new klass(...args)
@@ -67,6 +71,6 @@ const factory = (containers: ContainerInterface[], instance: boolean) => {
 
 export function Make(dep: string|InstanceType<any>, contexts?: string|string[]) {
   return (target: any, propertyKey:  string | symbol, index: number): any => {
-    getDeps(target).push([dep, contexts])
+    getDeps(target).push([dep, contexts as string[]])
   }
 }
