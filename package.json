@@ -1,10 +1,23 @@
 {
   "name": "dic-js",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "main": "./out/index.js",
   "description": "Dependency Injector for javascript, typescript, electron and node.js",
   "author": "Atanda Rasheed Ayomide <atandarash@gmail.com>",
-  "keywords": ["di", "dependency injection", "dependency inversion", "dependency", "injection", "inversion", "injector", "DI", "typescript", "javascript", "electron", "electron.js"],
+  "keywords": [
+    "di",
+    "dependency injection",
+    "dependency inversion",
+    "dependency",
+    "injection",
+    "inversion",
+    "injector",
+    "DI",
+    "typescript",
+    "javascript",
+    "electron",
+    "electron.js"
+  ],
   "license": "MIT",
   "private": false,
   "files": [
