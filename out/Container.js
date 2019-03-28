@@ -439,6 +439,31 @@ var Container = /** @class */ (function () {
         }
     };
     /**
+     * Checks if there is a contextual binding between to services,
+     * i.e from service -> dependency.
+     *
+     * @param service
+     * @param dependency
+     */
+    Container.prototype.hasContextualBinding = function (service, dependency) {
+        service = this.getServiceId(service);
+        dependency = this.getServiceId(dependency);
+        var context = this.contextuals[service];
+        return context != null && context[dependency] != null;
+    };
+    /**
+     * Returns the contextual factory given when creating the bridge.
+     *
+     * @param service
+     * @param dependency
+     */
+    Container.prototype.getContextualBinding = function (service, dependency) {
+        service = this.getServiceId(service);
+        dependency = this.getServiceId(dependency);
+        var context = this.contextuals[service];
+        return context[dependency];
+    };
+    /**
      * Get the factory for a given service.
      *
      * @param service

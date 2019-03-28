@@ -32,12 +32,12 @@ export function Singleton(target: any): any {
 }
 
 const factory = (containers: ContainerInterface[], instance: boolean) => {
-  return function (target: InstanceType<any>) {
+  return function <T>(target: InstanceType<any>) {
     const deps = getDeps(target)
     deleteDeps(target)
 
     containers.forEach(container => {
-      const registrar: Registrar =  instance
+      const registrar: Registrar<T> =  instance
         ? singleton(target as any, container)
         : bind(target as any, container)
 
@@ -46,20 +46,22 @@ const factory = (containers: ContainerInterface[], instance: boolean) => {
 
         deps.forEach(dep => {
           let [dep1, contexts] = dep
-          contexts = arrayWrap(contexts)
-          if (contexts.length < 1) {
-            args.push(make(dep1, getContext()))
-          } else {
-            contexts.some((context, i) => {
-              try {
-                args.push(make(dep1, getContext(context)))
-                return true
-              } catch (e) {
-                if (i + 1 == contexts.length) throw e
+          contexts = arrayWrap(contexts || [undefined])
+          contexts.some((context, i) => {
+            try {
+              const container = getContext(context)
+              if (container.hasContextualBinding(target, dep1)) {
+                const result = container.getContextualBinding(target, dep1)(container)
+                args.push(result)
+              } else {
+                args.push(make(dep1, container))
               }
-              return false
-            })
-          }
+              return true
+            } catch (e) {
+              if (i + 1 == contexts.length) throw e
+            }
+            return false
+          })
         })
 
         const klass = target as InstanceType<any>

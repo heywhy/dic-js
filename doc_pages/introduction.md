@@ -7,15 +7,17 @@ editLink: true
 
 # Introduction
 
-Have you ever thought of how beautiful **Laravel** container is. Here is an implementation in *javascript*. :grinning:
+A powerful and lightweight inversion of control container for JavaScript, Electron.js & Node.js apps powered by TypeScript.
 
 ## Introduction To Newcomers
 
-Dic-JS is a powerful tool for managing service dependencies and performing dependency injection. Dependency injection is a fancy phrase that essentially means this: service dependencies are "injected" into the factory as arguments/parameters.
+**DIC-JS** is a lightweight inversion of control (IoC) container for TypeScript and JavaScript apps. **DIC-JS** has a friendly API and encourages the usage of the best OOP and IoC practices.
+
+**Dic-JS** is a powerful tool for managing service dependencies and performing dependency injection. Dependency injection is a fancy phrase that essentially means this: service dependencies are "injected" into the factory as arguments/parameters.
 
 Let's look at a simple example:
 
-```js
+```ts
 const {bind, make} = require('dic-js')
 // using the comment style for this style should be used
 // with helper `wrap` or binded directly into the
@@ -33,6 +35,20 @@ bind('phone').dependsOn(['screen']).factory(print)
 
 const call = make('phone')
 call('lover') // => 'lover'
+
+// if using typescript with 'experimentalDecorators' option enabled.
+import { Singleton, Make, Bind } from 'dic-js/out/decorators'
+
+@Singleton
+export class Board {}
+
+@Singleton
+export class App {
+  constructor(@Make(Board) protected board: Board) {}
+}
+
+// you can resolve as usual
+const app: App = make(App)
 ```
 
 ## Binding
@@ -51,6 +67,12 @@ bind('phone', container => new Phone(container.make('screen'))) // <v0.8
 bind('phone').factory(...)
 // passing a container instance to bind to instead of the global instance
 bind('phone', containerInstance).factory(...)
+
+// using typescript
+
+@Bind
+@Bind('app') // if you want to bind to a different context.
+class Phone {}
 ```
 
 Note that we receive the container itself as an argument to the resolver only if no dependency is declared. We can then use the container to resolve sub-dependencies of the object/service we are building.
@@ -68,6 +90,13 @@ singleton('screen').factory(...)
 singleton('screen', containerInstance).factory(...)
 
 make('screen') === make('screen') // => true
+
+
+// using typescript
+
+@Singleton
+@Singleton('app') // if you want to bind to a different context.
+class Screen {}
 ```
 
 ### Binding Instances

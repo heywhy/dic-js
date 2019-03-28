@@ -1,5 +1,5 @@
 import { ContextBuilderInterface, ContainerInterface, ServiceFactory } from "./contracts";
-import { isFunction, getDICKey } from "./utils";
+import { isFunction, getDICKey, hasDICKey } from "./utils";
 
 export default class ContextBuilder implements ContextBuilderInterface {
 
@@ -21,6 +21,10 @@ export default class ContextBuilder implements ContextBuilderInterface {
       factory = () => value
     }
     const needs: string = getDICKey(<any>this._needs) || <string>this._needs
+    if (hasDICKey(factory as ServiceFactory)) {
+      const key = getDICKey(factory as any)
+      factory = ((container: ContainerInterface) => container.make(key)) as ServiceFactory
+    }
     this.container.addContextualBinding(this.service, needs, <ServiceFactory>factory)
   }
 }

@@ -29,6 +29,10 @@ export function getDICKey(callback: (...args: any[]) => any): string {
   return (<any>callback)[CONTAINER_KEY] || String(callback)
 }
 
+export function hasDICKey(callback: (...args: any[]) => any) {
+  return (<any>callback)[CONTAINER_KEY] != null
+}
+
 const generateDICKey = () => `${CONTAINER_KEY}-${NEXT_KEY++}`
 
 export const attachKey = (factory: (...args: any[]) => any): string => {

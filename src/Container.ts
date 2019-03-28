@@ -483,6 +483,33 @@ export default class Container implements ContainerInterface {
   }
 
   /**
+   * Checks if there is a contextual binding between to services,
+   * i.e from service -> dependency.
+   *
+   * @param service
+   * @param dependency
+   */
+  hasContextualBinding(service: string|ServiceFactory, dependency: string|ServiceFactory) {
+    service = this.getServiceId(service)
+    dependency = this.getServiceId(dependency)
+    const context = this.contextuals[service]
+    return context != null && context[dependency] != null
+  }
+
+  /**
+   * Returns the contextual factory given when creating the bridge.
+   *
+   * @param service
+   * @param dependency
+   */
+  getContextualBinding(service: string|ServiceFactory, dependency: string|ServiceFactory) {
+    service = this.getServiceId(service)
+    dependency = this.getServiceId(dependency)
+    const context = this.contextuals[service]
+    return context[dependency]
+  }
+
+  /**
    * Get the factory for a given service.
    *
    * @param service

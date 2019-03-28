@@ -17,6 +17,10 @@ var ContextBuilder = /** @class */ (function () {
             factory = function () { return value_1; };
         }
         var needs = utils_1.getDICKey(this._needs) || this._needs;
+        if (utils_1.hasDICKey(factory)) {
+            var key_1 = utils_1.getDICKey(factory);
+            factory = (function (container) { return container.make(key_1); });
+        }
         this.container.addContextualBinding(this.service, needs, factory);
     };
     return ContextBuilder;

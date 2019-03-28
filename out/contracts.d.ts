@@ -21,8 +21,8 @@ export interface ResultCallback {
     (value: any, container: ContainerInterface): any;
 }
 export interface ContextBuilderInterface {
-    needs(service: string | ((...args: any[]) => any)): ContextBuilderInterface;
-    give(value: string | number | ServiceFactory): void;
+    needs<T>(service: T | string | ((...args: any[]) => any)): ContextBuilderInterface;
+    give<T>(value: T | string | number | ServiceFactory): void;
 }
 export interface RegistrarInterface {
     factory(factory: ServiceFactory): void;
@@ -33,8 +33,8 @@ export interface ContainerInterface {
     tag(dependencies: Array<string | ServiceFactory>, tags: string | string[]): void;
     tagged(tag: string): any[];
     getServiceId(id: any): string;
-    when(service: string | ServiceFactory): ContextBuilderInterface;
-    make(service: string | ServiceFactory, parameters?: any[]): any;
+    when<T>(service: string | ServiceFactory | T): ContextBuilderInterface;
+    make<T>(service: string | ServiceFactory | T, parameters?: any[]): any;
     alias(service: string | ServiceFactory, alias: string): void;
     getAlias(alias: string): string;
     isAlias(service: string): boolean;
@@ -57,4 +57,6 @@ export interface ContainerInterface {
     singleton(service: string, dependencies: Array<string | ServiceFactory>, factory: ServiceFactory): void;
     singletonIf(service: string, dependencies: Array<string | ServiceFactory>, factory: ServiceFactory): void;
     addContextualBinding(concrete: string | ServiceFactory, service: string | ServiceFactory, factory: ServiceFactory): void;
+    getContextualBinding(service: string | ServiceFactory, dependency: string | ServiceFactory): ServiceFactory;
+    hasContextualBinding(service: string | ServiceFactory, dependency: string | ServiceFactory): boolean;
 }

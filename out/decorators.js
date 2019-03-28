@@ -34,23 +34,25 @@ var factory = function (containers, instance) {
                 var args = [];
                 deps.forEach(function (dep) {
                     var dep1 = dep[0], contexts = dep[1];
-                    contexts = utils_1.arrayWrap(contexts);
-                    if (contexts.length < 1) {
-                        args.push(_1.make(dep1, _1.getContext()));
-                    }
-                    else {
-                        contexts.some(function (context, i) {
-                            try {
-                                args.push(_1.make(dep1, _1.getContext(context)));
-                                return true;
+                    contexts = utils_1.arrayWrap(contexts || [undefined]);
+                    contexts.some(function (context, i) {
+                        try {
+                            var container_1 = _1.getContext(context);
+                            if (container_1.hasContextualBinding(target, dep1)) {
+                                var result = container_1.getContextualBinding(target, dep1)(container_1);
+                                args.push(result);
                             }
-                            catch (e) {
-                                if (i + 1 == contexts.length)
-                                    throw e;
+                            else {
+                                args.push(_1.make(dep1, container_1));
                             }
-                            return false;
-                        });
-                    }
+                            return true;
+                        }
+                        catch (e) {
+                            if (i + 1 == contexts.length)
+                                throw e;
+                        }
+                        return false;
+                    });
                 });
                 var klass = target;
                 return new (klass.bind.apply(klass, [void 0].concat(args)))();

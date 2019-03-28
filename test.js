@@ -51,7 +51,7 @@
 const { getContext, make } = require('./out/index')
 const context = getContext()
 
-const {App, Board} = require('./out/test')
+const {App, Board, Config} = require('./out/test')
 
 // getContext('app1').singletonIf(Board, [], () => {
 //   const b = new Board()
@@ -59,5 +59,7 @@ const {App, Board} = require('./out/test')
 //   return b
 // })
 
+context.when(App).needs(Board).give(Config)
+
 console.log(make(App).board)
-console.log(make(Board, getContext('app1')))
+// console.log(make(Board, getContext('app1')))

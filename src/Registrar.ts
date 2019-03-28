@@ -1,12 +1,12 @@
 import { RegistrarInterface, ContainerInterface, ServiceFactory } from "./contracts";
 
-export default class Registrar implements RegistrarInterface {
+export default class Registrar<T> implements RegistrarInterface {
 
   protected dependencies: Array<string|ServiceFactory> = []
 
   constructor(
     protected container: ContainerInterface,
-    protected service: string|ServiceFactory,
+    protected service: string|ServiceFactory|T,
     protected singleton: boolean = true
   ) {}
 

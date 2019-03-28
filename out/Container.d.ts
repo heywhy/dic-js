@@ -254,6 +254,21 @@ export default class Container implements ContainerInterface {
      */
     afterResolving(service: string | ServiceFactory | ResultCallback, callback?: ResultCallback): void;
     /**
+     * Checks if there is a contextual binding between to services,
+     * i.e from service -> dependency.
+     *
+     * @param service
+     * @param dependency
+     */
+    hasContextualBinding(service: string | ServiceFactory, dependency: string | ServiceFactory): boolean;
+    /**
+     * Returns the contextual factory given when creating the bridge.
+     *
+     * @param service
+     * @param dependency
+     */
+    getContextualBinding(service: string | ServiceFactory, dependency: string | ServiceFactory): ServiceFactory;
+    /**
      * Get the factory for a given service.
      *
      * @param service

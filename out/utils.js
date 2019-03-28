@@ -31,6 +31,10 @@ function getDICKey(callback) {
     return callback[CONTAINER_KEY] || String(callback);
 }
 exports.getDICKey = getDICKey;
+function hasDICKey(callback) {
+    return callback[CONTAINER_KEY] != null;
+}
+exports.hasDICKey = hasDICKey;
 var generateDICKey = function () { return CONTAINER_KEY + "-" + NEXT_KEY++; };
 exports.attachKey = function (factory) {
     if (!factory[CONTAINER_KEY]) {

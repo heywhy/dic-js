@@ -13,17 +13,17 @@ export const getContext = (id?: string): ContainerInterface => {
   return contexts[id] ? contexts[id] : (contexts[id] = new Container())
 }
 
-export const bind = (
-  service: string|ServiceFactory,
+export const bind = <T>(
+  service: string|ServiceFactory|T,
   container = Container.getInstance()
 ) => new Registrar(container, service, false)
 
-export const singleton = (
-  service: string|ServiceFactory,
+export const singleton = <T>(
+  service: string|ServiceFactory|T,
   container = Container.getInstance()
 ) => new Registrar(container, service)
 
-export const make = (
-  service: string|ServiceFactory,
+export const make = <T>(
+  service: string|ServiceFactory|T,
   container?: ContainerInterface
 ) => (container || getContext()).make(service)
