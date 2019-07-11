@@ -48,26 +48,18 @@
 // tear()
 // const call = wrap(['phone'], p => p.call())
 // call()
-const { bind, make, wrap, extend, singleton } = require('./lib/index')
-bind('phone', () => ({ no: 080 }))
+const { getContext, make } = require('./out/index')
+const context = getContext()
 
-singleton('screen', () => ({
-  print: msg => console.log(msg)
-}))
+const {App, Board, Config} = require('./out/test')
 
-const callback = wrap((phone, screen, a) => {
-  /*@container(phone, screen)*/
-  return [phone, screen, a]
-})
+// getContext('app1').singletonIf(Board, [], () => {
+//   const b = new Board()
+//   b.as = 'asd'
+//   return b
+// })
 
-console.log(callback('hello'))
+context.when(App).needs(Board).give(Config)
 
-singleton('caller', phone => {
-  /*@container(phone)*/
-  phone.call = () => 'hello world'
-  return phone
-})
-
-console.log(make('caller').call())
-
-console.log(extend)
+console.log(make(App).board)
+// console.log(make(Board, getContext('app1')))

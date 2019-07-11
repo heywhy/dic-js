@@ -1,15 +1,25 @@
 {
   "name": "dic-js",
-  "version": "0.1.0",
-  "main": "./lib/index.js",
-  "description": "Have you ever thought of how beautiful **Laravel** container is. Here is an implementation in javascript.",
+  "version": "0.9.2",
+  "main": "./out/index.js",
+  "description": "Dependency Injector for javascript, typescript, electron and node.js",
   "author": "Atanda Rasheed Ayomide <atandarash@gmail.com>",
+  "keywords": [
+    "di",
+    "dependency injection",
+    "dependency inversion",
+    "dependency",
+    "injection",
+    "inversion",
+    "injector",
+    "DI",
+    "typescript",
+    "javascript",
+    "electron",
+    "electron.js"
+  ],
   "license": "MIT",
   "private": false,
-  "files": [
-    "lib",
-    "src"
-  ],
   "homepage": "https://heywhy.github.io/dic-js/",
   "bugs": {
     "url": "https://github.com/heywhy/dic-js/issues"
@@ -20,10 +30,17 @@
   },
   "scripts": {
     "build": "bash ./scripts/build",
-    "cleans": "bash ./scripts/clean",
+    "clean": "bash ./scripts/clean",
     "serve:docs": "vuepress dev doc_pages",
     "build:docs": "vuepress build doc_pages -d docs",
-    "compile": "coffee -c --no-header -b -o lib src",
-    "watch": "coffee -c --no-header -b -w -o lib src"
+    "compile": "tsc -p .",
+    "watch": "tsc -w -p ."
+  },
+  "files": [
+    "src/",
+    "out/"
+  ],
+  "devDependencies": {
+    "vuepress": "^0.14.2"
   }
 }

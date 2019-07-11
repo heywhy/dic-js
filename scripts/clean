@@ -1,13 +1,13 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 
 cwd=$(pwd)
-lib=$cwd/lib
+out=$cwd/out
 docs=$cwd/docs
 
 if [[ -d $docs ]]; then
   rm -d -r $docs
 fi;
 
-if [[ -d $lib ]]; then
-  rm -d -r $lib
+if [[ -d $out ]]; then
+  rm -d -r $out
 fi;

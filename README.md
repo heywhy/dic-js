@@ -1,8 +1,10 @@
 # Dic Js
 
-Have you ever thought of how beautiful **Laravel** container is. Here is an implementation in *javascript*. :grinning:
+A powerful and lightweight inversion of control container for JavaScript, Electron.js & Node.js apps powered by TypeScript.
 
 ## Introduction To Newcomers
+
+DIC-JS is a lightweight inversion of control (IoC) container for TypeScript and JavaScript apps. DIC-JS has a friendly API and encourages the usage of the best OOP and IoC practices.
 
 Dic-JS is a powerful tool for managing service dependencies and performing dependency injection. Dependency injection is a fancy phrase that essentially means this: service dependencies are "injected" into the factory as arguments/parameters.
 
