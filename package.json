@@ -34,7 +34,8 @@
     "serve:docs": "vuepress dev doc_pages",
     "build:docs": "vuepress build doc_pages -d docs",
     "compile": "tsc -p .",
-    "watch": "tsc -w -p ."
+    "watch": "tsc -w -p .",
+    "test": "echo \"No test specified\""
   },
   "files": [
     "src/",
