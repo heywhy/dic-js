@@ -1,6 +1,7 @@
 import Container from "./Container";
 import { Dictionary, ContainerInterface, ServiceFactory } from "./contracts";
 import Registrar from "./Registrar";
+export * from './decorators'
 
 export {Container}
 

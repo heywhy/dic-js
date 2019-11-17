@@ -1,4 +1,7 @@
 "use strict";
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -6,6 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Container_1 = __importDefault(require("./Container"));
 exports.Container = Container_1.default;
 var Registrar_1 = __importDefault(require("./Registrar"));
+__export(require("./decorators"));
 var contexts = {};
 exports.getContext = function (id) {
     if (!id) {

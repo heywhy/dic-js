@@ -1,11 +1,14 @@
 "use strict";
-var __assign = (this && this.__assign) || Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-            t[p] = s[p];
-    }
-    return t;
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
 };
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -301,7 +304,7 @@ var Container = /** @class */ (function () {
             this.getServiceId(concrete), this.getServiceId(service)
         ], concrete = _a[0], service = _a[1];
         var contexts = this.contextuals[concrete] || {};
-        this.contextuals[concrete] = __assign({}, contexts, (_b = {}, _b[this.getAlias(service)] = factory, _b));
+        this.contextuals[concrete] = __assign(__assign({}, contexts), (_b = {}, _b[this.getAlias(service)] = factory, _b));
     };
     /**
      * Define a contextual binding.

@@ -1,6 +1,7 @@
 import Container from "./Container";
 import { ContainerInterface, ServiceFactory } from "./contracts";
 import Registrar from "./Registrar";
+export * from './decorators';
 export { Container };
 export declare const getContext: (id?: string | undefined) => ContainerInterface;
 export declare const bind: <T>(service: string | ServiceFactory | T, container?: ContainerInterface) => Registrar<T>;

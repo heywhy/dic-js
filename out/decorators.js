@@ -1,4 +1,11 @@
 "use strict";
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var _1 = require(".");
 var utils_1 = require("./utils");
@@ -55,7 +62,7 @@ var factory = function (containers, instance) {
                     });
                 });
                 var klass = target;
-                return new (klass.bind.apply(klass, [void 0].concat(args)))();
+                return new (klass.bind.apply(klass, __spreadArrays([void 0], args)))();
             });
         });
     };
